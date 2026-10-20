@@ -37,6 +37,18 @@ swift test
 The scene fixture in `Tests/StashKitTests/Fixtures/find-scene.json` has the shape of a live `findScene` answer with
 invented content.
 
+## Installation
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/ampire5/StashKit.git", from: "0.1.0"),
+],
+// in your target:
+dependencies: [.product(name: "StashKit", package: "StashKit"), .product(name: "StashKitUI", package: "StashKit")]
+```
+
+Used by [Loupe](https://github.com/ampire5/Loupe) and [FrameScrub](https://github.com/ampire5/FrameScrub).
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
