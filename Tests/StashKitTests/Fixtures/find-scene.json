@@ -1,0 +1,29 @@
+{
+  "data": {
+    "findScene": {
+      "id": "357",
+      "title": "Example Scene Title",
+      "date": "2024-05-01",
+      "code": "EX-0001",
+      "director": "Director A",
+      "details": "An invented description of the example scene.",
+      "organized": true,
+      "rating100": 80,
+      "o_counter": 2,
+      "play_count": 5,
+      "last_played_at": "2024-05-02T10:30:00Z",
+      "play_duration": 1234.5,
+      "resume_time": 321.25,
+      "studio": { "name": "Example Studio" },
+      "performers": [{ "name": "Performer A" }, { "name": "Performer B" }],
+      "tags": [{ "name": "Tag One" }, { "name": "Tag Two" }, { "name": "Tag Three" }],
+      "urls": ["https://example.com/scene/1", "https://example.com/scene/1/alt"],
+      "stash_ids": [{ "endpoint": "https://stashdb.example.com/graphql", "stash_id": "00000000-0000-4000-8000-000000000001" }],
+      "scene_markers": [
+        { "seconds": 12.5, "title": "Intro", "primary_tag": { "name": "Marker Tag A" } },
+        { "seconds": 95, "title": "", "primary_tag": { "name": "Marker Tag B" } }
+      ],
+      "files": [{ "id": "1001" }, { "id": "1002" }]
+    }
+  }
+}
