@@ -12,8 +12,9 @@ the system NetFS framework (for `ShareMounter`); SwiftPM adds it for you.
 
 - `StashKit`: the GraphQL client (`StashClient`), scene details for display (`StashSceneDetails`,
   `StashClient.sceneDetails(id:)`, a scene's file paths by id with `scenePaths(id:)`), the Stash-to-local path map
-  (`StashPathMap`), play-activity bookkeeping (`StashActivity`, `StashActivityRequest`), the queue step gate (`QueueStepGate`) and the SMB share mounter
-  (`ShareMounter.mount(_:timeout:completion:)`, through NetFS: the keychain password or the system sign-in dialog).
+  (`StashPathMap`), play-activity bookkeeping (`StashActivity`, `StashActivityRequest`), the queue step gate
+  (`QueueStepGate`) and the SMB share mounter (`ShareMounter.mount(_:timeout:completion:)`, through NetFS: the keychain
+  password or the system sign-in dialog).
   - `StashPathMap(mounts:rules:rememberedDriveServer:)` turns the Windows paths Stash stores (`S:\Videos\…`,
     `\\server\share\…`) into local paths: `resolve(_:)` gives `.local(URL)`, `.needsMount(smbURL)` (hand it to
     `ShareMounter`) or `.unmapped`. Drive letters go to the `S$`-style admin shares of the server most of them are
