@@ -11,9 +11,10 @@ the system NetFS framework (for `ShareMounter`); SwiftPM adds it for you.
 ## Products
 
 - `StashKit`: the GraphQL client (`StashClient`), scene details for display (`StashSceneDetails`,
-  `StashClient.sceneDetails(id:)`), the Stash-to-local path map (`StashPathMap`), play-activity bookkeeping
-  (`StashActivity`, `StashActivityRequest`), the queue step gate (`QueueStepGate`) and the SMB share mounter
-  (`ShareMounter.mount(_:timeout:completion:)`, through NetFS: the keychain password or the system sign-in dialog).
+  `StashClient.sceneDetails(id:)`, a scene's file paths by id with `scenePaths(id:)`), the Stash-to-local path map
+  (`StashPathMap`), play-activity bookkeeping (`StashActivity`, `StashActivityRequest`), the queue step gate
+  (`QueueStepGate`) and the SMB share mounter (`ShareMounter.mount(_:timeout:completion:)`, through NetFS: the keychain
+  password or the system sign-in dialog).
   - `StashPathMap(mounts:rules:rememberedDriveServer:)` turns the Windows paths Stash stores (`S:\Videos\…`,
     `\\server\share\…`) into local paths: `resolve(_:)` gives `.local(URL)`, `.needsMount(smbURL)` (hand it to
     `ShareMounter`) or `.unmapped`. Drive letters go to the `S$`-style admin shares of the server most of them are
@@ -26,7 +27,8 @@ the system NetFS framework (for `ShareMounter`); SwiftPM adds it for you.
   itself), a load failure shown in place, `onPageLoaded` after each page load. It changes the page only through the
   `StashInterceptor`s the app gives it (a script injected at document start plus a handler for its bridge messages).
   `StashInterceptor.scenePlayer` puts the scene's cover and ▶ in place of Stash's player and hands the scene to the
-  app (`StashScene`: id, file paths, resume point, whether it came from a list), and keeps Stash's queue so `step(_:)`
+  app (`StashScene`: id, file paths, resume point, whether it came from a list; the app can also name one itself with
+  `StashScene(id:paths:resumeTime:)`), and keeps Stash's queue so `step(_:)`
   can go to the next or previous scene. Its full form is `scenePlayer(onOpen:onBridgeMissing:)`: `onBridgeMissing`
   runs when the page has no `PluginApi` (not a Stash page, or a Stash without the plugin API), so the app can say so.
 

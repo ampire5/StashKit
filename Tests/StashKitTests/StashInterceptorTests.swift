@@ -13,6 +13,18 @@ import StashKitUI
         #expect(opened.first?.paths == ["X:\\a.mp4"])
     }
 
+    @Test func aSceneCanBeNamedDirectly() {
+        let scene = StashScene(id: "9", paths: [], resumeTime: 12)
+        #expect(scene.id == "9")
+        #expect(scene.paths.isEmpty)
+        #expect(scene.resumeTime == 12)
+        #expect(!scene.hasQueue && !scene.automatic && scene.duration == 0)
+        let fromMessage = StashScene(message: ["type": "open", "sceneID": "9", "paths": ["X:\\a.mp4"], "resumeTime": 12,
+                                               "duration": 60, "hasQueue": true, "automatic": true])
+        #expect(fromMessage == StashScene(id: "9", paths: ["X:\\a.mp4"], resumeTime: 12, duration: 60, hasQueue: true,
+                                          automatic: true))
+    }
+
     @Test func scenePlayerTakesNoBridge() {
         var missing = 0
         let interceptor = StashInterceptor.scenePlayer(onOpen: { _ in }, onBridgeMissing: { missing += 1 })

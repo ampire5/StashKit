@@ -14,15 +14,27 @@ public struct StashScene: Equatable, Sendable {
     /// Sent when the page opened with `autoplay=true` (after a queue step), not by a click on the cover.
     public let automatic: Bool
 
+    /// A scene named by the app itself (a link, a plugin page): no queue, not automatic. `paths` may be empty when
+    /// they are still to be asked of Stash (`StashClient.scenePaths(id:)`).
+    public init(id: String, paths: [String], resumeTime: Double = 0, duration: Double = 0, hasQueue: Bool = false,
+                automatic: Bool = false) {
+        self.id = id
+        self.paths = paths
+        self.resumeTime = resumeTime
+        self.duration = duration
+        self.hasQueue = hasQueue
+        self.automatic = automatic
+    }
+
+    /// The `open` message the scene page's script posts.
     public init?(message body: Any) {
         guard let body = body as? [String: Any], body["type"] as? String == "open",
               let id = body["sceneID"] as? String, let paths = body["paths"] as? [String] else { return nil }
-        self.id = id
-        self.paths = paths
-        resumeTime = (body["resumeTime"] as? NSNumber)?.doubleValue ?? 0
-        duration = (body["duration"] as? NSNumber)?.doubleValue ?? 0
-        hasQueue = body["hasQueue"] as? Bool ?? false
-        automatic = body["automatic"] as? Bool ?? false
+        self.init(id: id, paths: paths,
+                  resumeTime: (body["resumeTime"] as? NSNumber)?.doubleValue ?? 0,
+                  duration: (body["duration"] as? NSNumber)?.doubleValue ?? 0,
+                  hasQueue: body["hasQueue"] as? Bool ?? false,
+                  automatic: body["automatic"] as? Bool ?? false)
     }
 }
 

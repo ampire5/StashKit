@@ -79,6 +79,16 @@ public final class StashClient: Sendable {
         return (scenes?.first?["files"] as? [[String: Any]])?.first?["path"] as? String
     }
 
+    /// The paths of a scene's files, in Stash's order (the primary file first); `StashError.server` when Stash has no
+    /// such scene. For opening a scene the app knows only by id (a link, a plugin page).
+    public func scenePaths(id: String) async throws -> [String] {
+        let data = try await query("query($id: ID!) { findScene(id: $id) { files { path } } }", ["id": id])
+        guard let scene = data["findScene"] else { throw StashError.badResponse }
+        if scene is NSNull { throw StashError.server("Scene \(id) not found in Stash") }
+        guard let files = (scene as? [String: Any])?["files"] as? [[String: Any]] else { throw StashError.badResponse }
+        return files.compactMap { $0["path"] as? String }
+    }
+
     func query(_ text: String, _ variables: [String: Any] = [:]) async throws -> [String: Any] {
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
