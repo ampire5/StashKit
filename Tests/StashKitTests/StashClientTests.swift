@@ -97,6 +97,18 @@ final class StubProtocol: URLProtocol, @unchecked Sendable {
         #expect(try await client().firstScenePath() == nil)
     }
 
+    @Test func scenePathsByID() async throws {
+        answer(#"{"data":{"findScene":{"files":[{"path":"S:\\Videos\\a.mp4"},{"path":"\\\\nas\\m\\a.mp4"}]}}}"#)
+        #expect(try await client().scenePaths(id: "42") == [#"S:\Videos\a.mp4"#, #"\\nas\m\a.mp4"#])
+        let variables = try #require(StubProtocol.lastBody?["variables"] as? [String: Any])
+        #expect(variables["id"] as? String == "42")
+        #expect((StubProtocol.lastBody?["query"] as? String)?.contains("findScene(id: $id) { files { path } }") == true)
+        answer(#"{"data":{"findScene":{"files":[]}}}"#)
+        #expect(try await client().scenePaths(id: "42") == [])
+        answer(#"{"data":{"findScene":null}}"#)
+        await #expect(throws: StashError.server("Scene 7 not found in Stash")) { try await client().scenePaths(id: "7") }
+    }
+
     @Test func errorsReadWell() {
         #expect(StashError.server("scene not found").localizedDescription == "scene not found")
         #expect(StashError.http(502).localizedDescription == "Stash answered HTTP 502")
