@@ -1,5 +1,7 @@
 # StashKit
 
+Developer guide: [architecture and code map](docs/architecture.md).
+
 Shared Swift package for macOS apps (FrameScrub, Loupe) that talk to a [Stash](https://stashapp.cc) media server
 (developed against v0.31.1).
 
