@@ -181,7 +181,7 @@ public final class StashLibraryView: NSView, WKNavigationDelegate, WKUIDelegate 
     }
 
     public func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPanelParameters,
-                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping ([URL]?) -> Void) {
+                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping @MainActor ([URL]?) -> Void) {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = parameters.allowsMultipleSelection
         panel.canChooseDirectories = parameters.allowsDirectories
@@ -190,7 +190,7 @@ public final class StashLibraryView: NSView, WKNavigationDelegate, WKUIDelegate 
     }
 
     public func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String,
-                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping @MainActor () -> Void) {
         let alert = NSAlert()
         alert.messageText = message
         alert.runModal()
@@ -198,7 +198,7 @@ public final class StashLibraryView: NSView, WKNavigationDelegate, WKUIDelegate 
     }
 
     public func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String,
-                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping @MainActor (Bool) -> Void) {
         let alert = NSAlert()
         alert.messageText = message
         alert.addButton(withTitle: "OK")
@@ -207,7 +207,7 @@ public final class StashLibraryView: NSView, WKNavigationDelegate, WKUIDelegate 
     }
 
     public func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?,
-                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
+                 initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping @MainActor (String?) -> Void) {
         let alert = NSAlert()
         alert.messageText = prompt
         let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
@@ -272,7 +272,7 @@ public final class StashLibraryView: NSView, WKNavigationDelegate, WKUIDelegate 
 
     /// The page stays on Stash: a link to another site opens in the default browser.
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
-                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+                 decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
         if let target = navigationAction.request.url, navigationAction.targetFrame?.isMainFrame != false,
            let scheme = target.scheme?.lowercased(), scheme == "http" || scheme == "https",
            !StashPathMap.isStashPage(scheme: scheme, host: target.host ?? "", port: target.port ?? 0, stashURL: url) {

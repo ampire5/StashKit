@@ -25,7 +25,9 @@ interceptors and handles open callbacks. A page bridge message describes an item
 controls stepping coordination; it does not own a player.
 
 WebKit operations and host UI callbacks belong to the UI thread. Share mounting runs outside UI work and returns
-on the main actor. The host must guard obsolete opens/results when selection or configuration changes. Neither
+on the main actor. Its one-shot completion state is main-actor owned so NetFS and timeout callbacks share the
+same completion gate. WebKit delegate completion handlers carry the SDK's main-actor isolation. The host must
+guard obsolete opens/results when selection or configuration changes. Neither
 bridge data nor a server path is an instruction to modify the application's configuration.
 
 ## Persistence and checks

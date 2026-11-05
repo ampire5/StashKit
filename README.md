@@ -5,7 +5,7 @@ Developer guide: [architecture and code map](docs/architecture.md).
 Shared Swift package for macOS apps (FrameScrub, Loupe) that talk to a [Stash](https://stashapp.cc) media server
 (developed against v0.31.1).
 
-Requirements: macOS 26+, swift-tools 6.2 (the targets build in the Swift 5 language mode). The `StashKit` target links
+Requirements: macOS 26+, swift-tools 6.2 (the targets build in the Swift 6 language mode). The `StashKit` target links
 the system NetFS framework (for `ShareMounter`); SwiftPM adds it for you.
 
 ![Stash's WebUI inside Loupe](https://raw.githubusercontent.com/ampire5/Loupe/main/docs/images/stash.webp)

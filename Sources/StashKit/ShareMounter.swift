@@ -13,12 +13,10 @@ public enum ShareMounter {
         let openOptions = NSMutableDictionary()
         openOptions[kNAUIOptionKey] = kNAUIOptionAllowUI
         var request: AsyncRequestID?
-        var finished = false
+        let completionState = MountCompletion(completion)
         func finish(_ result: Result<Void, Error>) {
             DispatchQueue.main.async {
-                guard !finished else { return }
-                finished = true
-                MainActor.assumeIsolated { completion(result) }
+                completionState.finish(result)
             }
         }
         let status = NetFSMountURLAsync(smbURL as CFURL, nil, nil, nil, openOptions, nil, &request, DispatchQueue.main) { status, _, _ in
@@ -35,9 +33,26 @@ public enum ShareMounter {
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-            guard !finished else { return }
+            guard !completionState.finished else { return }
             if let request { NetFSMountURLCancel(request) }
             finish(.failure(Failure(errorDescription: "no answer in \(Int(timeout)) s")))
         }
+    }
+}
+
+/// Mutable completion state is owned by the main actor; NetFS and timeout callbacks use the main queue.
+@MainActor
+private final class MountCompletion {
+    private(set) var finished = false
+    private let completion: @MainActor (Result<Void, Error>) -> Void
+
+    nonisolated init(_ completion: @escaping @MainActor (Result<Void, Error>) -> Void) {
+        self.completion = completion
+    }
+
+    func finish(_ result: Result<Void, Error>) {
+        guard !finished else { return }
+        finished = true
+        completion(result)
     }
 }
